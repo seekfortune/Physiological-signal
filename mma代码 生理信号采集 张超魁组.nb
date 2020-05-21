@@ -1,0 +1,9 @@
+dev=DeviceOpen["Serial","COM2"]
+data:=ToExpression[StringCases[FromCharacterCode[DeviceReadBuffer[dev,"ReadTerminator"->10]],RegularExpression["[0-9]+"]][[1]]]
+data1={};
+Dynamic[AppendTo[data1,data];If[Length[data1]>500,data1=data1[[2;;]];]]
+Dynamic[ListPlot[data1,Joined->True,PlotRange->{0,800}]]
+Dynamic[cold={};heart={};
+For[i=Length[data1];cold={};count=0,i>0\[And]count<3,i--,
+If[data1[[i]]>600,AppendTo[cold,i];count++]];
+N[(First[cold]-Last[cold])/1.6]]
